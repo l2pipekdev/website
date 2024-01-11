@@ -1,0 +1,66 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: rgb(28, 30, 35);
+    background-size: cover;
+}
+
+.rules-bg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.title {
+    text-align: center;
+    margin: 20px 0; /* Zmniejsz marginesy górnego i dolnego */
+}
+
+.title img {
+    max-width: 100%; /* Zapobieganie rozciąganiu obrazu poza jego rzeczywistą szerokość */
+    height: auto; /* Dostosowanie wysokości proporcjonalnie do szerokości */
+}
+
+.rules {
+    backdrop-filter: blur(5px); /* Dodaj efekt rozmazania */
+    background: rgba(0, 0, 0, 0.5); /* Ustawienie przezroczystości poprzez kanał alfa */
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 600px;
+    width: 100%;
+    color: #fff;
+}
+
+.rules-start {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.rul-par-1,
+.rul-par-2,
+.rul-par-3,
+.rul-par-4 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 15px;
+    margin-bottom: 0; /* Zresetuj margines dolny */
+}
+
+.rul-1,
+.rul-2,
+.rul-3,
+.rul-4 {
+    margin-bottom: 20px;
+}
+body::-webkit-scrollbar {
+    width: 12px;
+}
+body::-webkit-scrollbar-track {
+    background-color: none;
+}
+body::-webkit-scrollbar-thumb {
+    background-color: rgb(20, 25, 15);
+    border-radius: 6px;
+}
