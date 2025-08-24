@@ -65,14 +65,17 @@ def possible_ghosts(found):
 
 # ===== Streamlit UI =====
 st.set_page_config(page_title="Phasmo Assistant", layout="wide")
-st.title("Phasmo Assistant")
+st.markdown("<h1 style='text-align:center; color: #4CAF50;'>Phasmo Assistant</h1>", unsafe_allow_html=True)
 
 if "found" not in st.session_state:
     st.session_state.found = set()
 
+st.subheader("Wybierz dowody (kliknij aby wlaczyc/odznaczyc):")
+
 cols = st.columns(len(all_evidence))
 for i, ev in enumerate(all_evidence):
-    if cols[i].button(ev):
+    color = "#4CAF50" if ev in st.session_state.found else "#444"
+    if cols[i].button(ev, key=ev):
         if ev in st.session_state.found:
             st.session_state.found.remove(ev)
         else:
@@ -80,26 +83,27 @@ for i, ev in enumerate(all_evidence):
 
 found = st.session_state.found
 
+# Wybrane dowody
 st.subheader("Wybrane dowody:")
-st.write(", ".join(found) if found else "Brak dowodow")
+st.markdown(f"<span style='color:#4CAF50;'>{', '.join(found)}</span>" if found else "Brak dowodow", unsafe_allow_html=True)
 
-matches = possible_ghosts(found)
-
+# Mozliwe duchy
 st.subheader("Mozliwe duchy:")
+matches = possible_ghosts(found)
 if not found:
     for ghost, data in ghosts.items():
-        st.markdown(f"**{ghost}** - {data['info']}")
+        st.markdown(f"<span style='color:#AAAAAA;'>**{ghost}** - {data['info']}</span>", unsafe_allow_html=True)
 else:
     if matches:
         for ghost, missing, info in matches:
-            if missing:
-                st.markdown(f"**{ghost}** (brakuje: {', '.join(missing)}) - {info}")
-            else:
-                st.markdown(f"**{ghost}** ✅ pelny zestaw dowodow - {info}")
+            color = "#4CAF50" if not missing else "#FFCC00"
+            suffix = " ✅" if not missing else ""
+            st.markdown(f"<span style='color:{color};'>**{ghost}{suffix}** (brakuje: {', '.join(missing) if missing else 'pelny zestaw'}) - {info}</span>", unsafe_allow_html=True)
         if len(found) == 1:
             suggestions = set()
             for _, missing, _ in matches:
                 suggestions |= missing
-            st.markdown(f"**Nastepne badania:** {', '.join(suggestions)}")
+            if suggestions:
+                st.markdown(f"<span style='color:#FF5733; font-weight:bold;'>Nastepne badania: {', '.join(suggestions)}</span>", unsafe_allow_html=True)
     else:
         st.write("Brak pasujacych duchow.")
