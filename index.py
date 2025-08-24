@@ -72,19 +72,21 @@ if "found" not in st.session_state:
 
 st.subheader("Wybierz dowody (max 3):")
 
-# Checkboxy z limitem 3
+# Checkboxy z limitem 3 dowodow
+warning = False
 for ev in all_evidence:
     checked = ev in st.session_state.found
     new_state = st.checkbox(ev, value=checked)
-    if new_state:
+    if new_state and ev not in st.session_state.found:
         if len(st.session_state.found) < 3:
             st.session_state.found.add(ev)
         else:
-            st.warning("Max 3 dowody! Nie mozna dodac wiecej.")
-            # Cofamy zaznaczenie checkboxa
-            st.experimental_rerun()
-    else:
+            warning = True
+    elif not new_state and ev in st.session_state.found:
         st.session_state.found.discard(ev)
+
+if warning:
+    st.warning("Max 3 dowody! Nie mozna dodac wiecej.")
 
 found = st.session_state.found
 
