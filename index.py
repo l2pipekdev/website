@@ -70,26 +70,31 @@ st.markdown("<h1 style='text-align:center; color: #4CAF50;'>Phasmo Assistant</h1
 if "found" not in st.session_state:
     st.session_state.found = set()
 
-st.subheader("Wybierz dowody (kliknij aby wlaczyc/odznaczyc):")
+st.subheader("Wybierz dowody:")
 
-cols = st.columns(len(all_evidence))
-for i, ev in enumerate(all_evidence):
-    color = "#4CAF50" if ev in st.session_state.found else "#FF3333"  # zielony = wybrane, czerwony = nie wybrane
-    if cols[i].button(ev, key=ev):
-        if ev in st.session_state.found:
-            st.session_state.found.remove(ev)
-        else:
-            st.session_state.found.add(ev)
+# Checkboxy toggle
+for ev in all_evidence:
+    checked = ev in st.session_state.found
+    new_state = st.checkbox(ev, value=checked)
+    if new_state:
+        st.session_state.found.add(ev)
+    else:
+        st.session_state.found.discard(ev)
 
 found = st.session_state.found
 
 # Wybrane dowody
 st.subheader("Wybrane dowody:")
-st.markdown(f"<span style='color:#4CAF50;'>{', '.join(found)}</span>" if found else "<span style='color:#FF3333;'>Brak dowodow</span>", unsafe_allow_html=True)
+st.markdown(
+    f"<span style='color:#4CAF50;'>{', '.join(found)}</span>" if found else
+    "<span style='color:#FF3333;'>Brak dowodow</span>",
+    unsafe_allow_html=True
+)
 
 # Mozliwe duchy
 st.subheader("Mozliwe duchy:")
 matches = possible_ghosts(found)
+
 if not found:
     for ghost, data in ghosts.items():
         st.markdown(f"<span style='color:#AAAAAA;'>**{ghost}** - {data['info']}</span>", unsafe_allow_html=True)
@@ -98,7 +103,9 @@ else:
         for ghost, missing, info in matches:
             color = "#4CAF50" if not missing else "#FFCC00"
             suffix = " ✅" if not missing else ""
-            st.markdown(f"<span style='color:{color};'>**{ghost}{suffix}** (brakuje: {', '.join(missing) if missing else 'pelny zestaw'}) - {info}</span>", unsafe_allow_html=True)
+            st.markdown(f"<span style='color:{color};'>**{ghost}{suffix}** "
+                        f"(brakuje: {', '.join(missing) if missing else 'pelny zestaw'}) - {info}</span>",
+                        unsafe_allow_html=True)
         if len(found) == 1:
             suggestions = set()
             for _, missing, _ in matches:
