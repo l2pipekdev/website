@@ -74,7 +74,7 @@ st.subheader("Wybierz dowody (kliknij aby wlaczyc/odznaczyc):")
 
 cols = st.columns(len(all_evidence))
 for i, ev in enumerate(all_evidence):
-    color = "#4CAF50" if ev in st.session_state.found else "#444"
+    color = "#4CAF50" if ev in st.session_state.found else "#FF3333"  # zielony = wybrane, czerwony = nie wybrane
     if cols[i].button(ev, key=ev):
         if ev in st.session_state.found:
             st.session_state.found.remove(ev)
@@ -85,7 +85,7 @@ found = st.session_state.found
 
 # Wybrane dowody
 st.subheader("Wybrane dowody:")
-st.markdown(f"<span style='color:#4CAF50;'>{', '.join(found)}</span>" if found else "Brak dowodow", unsafe_allow_html=True)
+st.markdown(f"<span style='color:#4CAF50;'>{', '.join(found)}</span>" if found else "<span style='color:#FF3333;'>Brak dowodow</span>", unsafe_allow_html=True)
 
 # Mozliwe duchy
 st.subheader("Mozliwe duchy:")
