@@ -70,14 +70,19 @@ st.markdown("<h1 style='text-align:center; color: #4CAF50;'>Phasmo Assistant</h1
 if "found" not in st.session_state:
     st.session_state.found = set()
 
-st.subheader("Wybierz dowody:")
+st.subheader("Wybierz dowody (max 3):")
 
-# Checkboxy toggle
+# Checkboxy z limitem 3
 for ev in all_evidence:
     checked = ev in st.session_state.found
     new_state = st.checkbox(ev, value=checked)
     if new_state:
-        st.session_state.found.add(ev)
+        if len(st.session_state.found) < 3:
+            st.session_state.found.add(ev)
+        else:
+            st.warning("Max 3 dowody! Nie mozna dodac wiecej.")
+            # Cofamy zaznaczenie checkboxa
+            st.experimental_rerun()
     else:
         st.session_state.found.discard(ev)
 
